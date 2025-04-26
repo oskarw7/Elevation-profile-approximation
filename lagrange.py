@@ -25,3 +25,18 @@ def getInterpolationNodes(points: list[tuple[float, float]], nodesCount: int,
         if discrete not in discreteNodes:
             discreteNodes.append(discrete)
     return discreteNodes
+
+def lagrangeInterpolation(xCompute: list[float], nodes: list[tuple[float, float]]) -> list[float]:
+    yCompute = []
+    for x in xCompute:
+        yCurrent = 0
+        for i in range(len(nodes)):
+            xi, yi = nodes[i]
+            phi = 1
+            for j in range(len(nodes)):
+                if i != j:
+                    xj, _ = nodes[j]
+                    phi *= (x-xj) / (xi-xj)
+            yCurrent += yi*phi
+        yCompute.append(yCurrent)
+    return yCompute
