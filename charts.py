@@ -2,8 +2,20 @@ import matplotlib.pyplot as plt
 
 def plotOriginal(x: list[float], y: list[float], filename: str):
     plt.figure(figsize=(25, 10))
-    plt.plot(x, y, marker='o', markersize=3)
+    plt.plot(x, y)
     plt.title(f"Dane wejściowe dla {filename}")
-    plt.xlabel("Dystans[m]")
+    plt.xlabel("Odległość[m]")
     plt.ylabel("Wysokość[m]")
-    plt.show()
+    name = filename.rsplit('.', 1)[0]
+    plt.savefig(f"charts/input_{name}.png")
+    # plt.show()
+
+def plotInterpolation(axes, xPoints: list[float], yPoints: list[float], yInterpolation: list[float],
+                      xNodes: list[float], yNodes: list[float], method: str, nodesCount: int):
+    axes.semilogy(xPoints, yPoints, color='blue')
+    axes.semilogy(xPoints, yInterpolation, color='green')
+    axes.scatter(xNodes, yNodes, marker='o', color='green')
+    axes.set_title(f"Wykres metody {method} dla {nodesCount} węzłów")
+    axes.set_xlabel("Odległość[m]")
+    axes.set_ylabel("Wysokość[m]")
+    axes.legend(["Funkcja wejściowa", "Wielomian interpolacyjny", "Węzły interpolacyjne"])
