@@ -1,0 +1,32 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[utf8]{inputenc} % Kodowanie znaków
+\usepackage{polski}         % Język polski
+\usepackage{graphicx}       % Wstawianie obrazków
+\usepackage{amsmath, amssymb} % Symbole matematyczne
+\usepackage{hyperref}       % Linki w dokumencie
+\usepackage{geometry}       % Ustawienia marginesów
+\geometry{margin=2.5cm}     % Marginesy 2.5cm
+\usepackage{indentfirst}    % Wcięcie w pierwszej linii
+\usepackage{url}			 % Linkowanie w bibliografii
+
+% Strona tytułowa
+\title{\textbf{Aproksymacja profilu wysokościowego}}
+\author{Oskar Wiśniewski, 198058\\
+Politechnika Gdańska, WETI}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Wstęp}
+	\subsection{Profil wysokościowy}
+	Profil wysokościowy to wykres przedstawiający zmiany wartości wysokości bezwzględnej terenu w funkcji odległości od punktu początkowego trasy. Pokazuje, jak zmienia się wysokość nad poziomem morza wraz z oddalaniem się od owego punktu startowego, dzięki czemu pozwala na intuicyjnie odczytanie charakteru jakiegoś odcinka terenu.
+	\par Profile wysokościowe mają szczególne znaczenie dla uczestników wyścigów kolarskich, biegaczy oraz turystów, którym to ułatwiają przygotowanie do trasy i rozplanowanie wysiłku. Korzystać z nich również mogą inżynierowie projektujący infrastrukturę transportową, geolodzy, czy architekci. 
+	
+	\subsection{Interpolacja}
+	Interpolacja polega na wyznaczaniu przybliżonych wartości funkcji na podstawie punktów, dla których są one znane, zwanych węzłami interpolacji. Mogą nimi być przykładowo punkty pomiarowe, wyniki obliczeń numerycznych, czy punkty zadane analitycznie (na podstawie wzoru funkcji).
+	\par Pierwszym etapem interpolacji jest wyznaczenie parametrów funkcji interpolacyjnej na podstawie węzłów. Następnie należy obliczyć wartości funkcji interpolacyjnej dla zadanej siatki punktów. Co istotne, z definicji interpolacja dotyczy wyłącznie oszacowania wartości wewnątrz przedziału wyznaczonego przez węzły interpolacyjne - poza zakresem mówimy o ekstrapolacji, które generalnie nie gwarantuje takiej samej dokładności jak interpolacja.
+
+\end{document}

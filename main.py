@@ -13,23 +13,69 @@ def main():
         xScaled, yScaled = utils.scaleTo(xSubset, xSubset[0], xSubset[-1]), ySubset
         xScaled, yScaled = utils.scaleTo(xSubset, xSubset[0], xSubset[-1]), ySubset
         # charts.plotOriginal(xSubset, ySubset, path[0])
+
+        fig, axes = plt.subplots(len(nodesCount)//2, len(nodesCount)//2, figsize=(20, 10))
+        fig.suptitle(f"Wyniki interpolacji Lagrange'a dla input/{path[0]}", fontsize=25)
+        for i in range(len(nodesCount)):
+            xNodes, yNodes = utils.getInterpolationNodes(xScaled, yScaled, nodesCount[i], utils.linspace)
+            yTest = lagrange.lagrangeInterpolation(xScaled, xNodes, yNodes)
+            xNodesReverseScaled = utils.scaleFrom(xNodes, xSubset[0], xSubset[-1])
+            row = i // 2
+            col = i % 2
+            charts.plotInterpolation(axes[row, col], xSubset, ySubset, yTest, xNodesReverseScaled, yNodes,
+                                     "Lagrange", nodesCount[i])
+        name = path[0].rsplit('.', 1)[0]
+        plt.savefig(f"charts/lagrange_{name}.png")
+        plt.close(fig)
+
+        fig, axes = plt.subplots(len(nodesCount) // 2, len(nodesCount) // 2, figsize=(20, 10))
+        fig.suptitle(f"Wyniki interpolacji Lagrange'a + Czebyszew dla input/{path[0]}", fontsize=25)
+        for i in range(len(nodesCount)):
+            xNodes, yNodes = utils.getInterpolationNodes(xScaled, yScaled, nodesCount[i], utils.chebyshev)
+            yTest = lagrange.lagrangeInterpolation(xScaled, xNodes, yNodes)
+            xNodesReverseScaled = utils.scaleFrom(xNodes, xSubset[0], xSubset[-1])
+            row = i // 2
+            col = i % 2
+            charts.plotInterpolation(axes[row, col], xSubset, ySubset, yTest, xNodesReverseScaled, yNodes,
+                                     "Lagrange+Czebyszew", nodesCount[i])
+        name = path[0].rsplit('.', 1)[0]
+        plt.savefig(f"charts/chebyszev_{name}.png")
+        plt.close(fig)
+
+        fig, axes = plt.subplots(len(nodesCount) // 2, len(nodesCount) // 2, figsize=(20, 10))
+        fig.suptitle(f"Wyniki interpolacji funkcjami sklejanymi dla input/{path[0]}", fontsize=25)
+        for i in range(len(nodesCount)):
+            xNodes, yNodes = utils.getInterpolationNodes(xSubset, ySubset, nodesCount[i], utils.linspace)
+            yTest = cubic_spline.cubicSplineIntepolation(xSubset, xNodes, yNodes)
+            row = i // 2
+            col = i % 2
+            charts.plotInterpolation(axes[row, col], xSubset, ySubset, yTest, xNodes, yNodes,
+                                     "funkcji sklejanych", nodesCount[i])
+        name = path[0].rsplit('.', 1)[0]
+        plt.savefig(f"charts/cubic_spline_{name}.png")
+        plt.close(fig)
+
         fig, axes = plt.subplots(len(nodesCount), 3, figsize=(20, 25))
         fig.suptitle(f"Wyniki metod interpolacji dla input/{path[0]}", fontsize=25)
         for i in range(len(nodesCount)):
             xNodes, yNodes = utils.getInterpolationNodes(xScaled, yScaled, nodesCount[i], utils.linspace)
             yTest = lagrange.lagrangeInterpolation(xScaled, xNodes, yNodes)
             xNodesReverseScaled = utils.scaleFrom(xNodes, xSubset[0], xSubset[-1])
-            charts.plotInterpolation(axes[i,0], xSubset, ySubset, yTest, xNodesReverseScaled, yNodes, "Lagrange", nodesCount[i])
+            charts.plotInterpolation(axes[i,0], xSubset, ySubset, yTest, xNodesReverseScaled, yNodes,
+                                     "Lagrange", nodesCount[i])
 
             xNodes, yNodes = utils.getInterpolationNodes(xScaled, yScaled, nodesCount[i], utils.chebyshev)
             yTest = lagrange.lagrangeInterpolation(xScaled, xNodes, yNodes)
             xNodesReverseScaled = utils.scaleFrom(xNodes, xSubset[0], xSubset[-1])
-            charts.plotInterpolation(axes[i,1], xSubset, ySubset, yTest, xNodesReverseScaled, yNodes, "Lagrange + Czebyszew", nodesCount[i])
+            charts.plotInterpolation(axes[i,1], xSubset, ySubset, yTest, xNodesReverseScaled, yNodes,
+                                     "Lagrange + Czebyszew", nodesCount[i])
 
             xNodes, yNodes = utils.getInterpolationNodes(xSubset, ySubset, nodesCount[i], utils.linspace)
             yTest = cubic_spline.cubicSplineIntepolation(xSubset, xNodes, yNodes)
-            charts.plotInterpolation(axes[i,2], xSubset, ySubset, yTest, xNodes, yNodes, "funkcji sklejanych", nodesCount[i])
-        plt.show()
+            charts.plotInterpolation(axes[i,2], xSubset, ySubset, yTest, xNodes, yNodes,
+                                     "funkcji sklejanych", nodesCount[i])
+        name = path[0].rsplit('.', 1)[0]
+        plt.savefig(f"charts/comparison_{name}.png")
         plt.close(fig)
 
 
