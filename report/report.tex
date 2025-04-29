@@ -28,5 +28,36 @@ Politechnika Gdańska, WETI}
 	\subsection{Interpolacja}
 	Interpolacja polega na wyznaczaniu przybliżonych wartości funkcji na podstawie punktów, dla których są one znane, zwanych węzłami interpolacji. Mogą nimi być przykładowo punkty pomiarowe, wyniki obliczeń numerycznych, czy punkty zadane analitycznie (na podstawie wzoru funkcji).
 	\par Pierwszym etapem interpolacji jest wyznaczenie parametrów funkcji interpolacyjnej na podstawie węzłów. Następnie należy obliczyć wartości funkcji interpolacyjnej dla zadanej siatki punktów. Co istotne, z definicji interpolacja dotyczy wyłącznie oszacowania wartości wewnątrz przedziału wyznaczonego przez węzły interpolacyjne - poza zakresem mówimy o ekstrapolacji, które generalnie nie gwarantuje takiej samej dokładności jak interpolacja.
+	\subsection{Interpolacja wielomianowa - metoda Lagrange'a}
+	Interpolacja wielomianowa funkcji $f(x)$ polega na skonstruowaniu wielomianu $W_{N}(x)$ stopnia maksymalnie $N$ w oparciu o $N+1$ różnych węzłów interpolacyjnych $x_0, x_1, x_2, \dots, x_{N}$, dla których to zachodzi warunek:
+	\begin{equation}
+	W_N(x_i) = f(x_i), \quad \forall i \in \{0, 1, 2, \dots, N\}
+	\end{equation}
+	\par Dla danych węzłów interpolacyjnych i ich wartości można skonstruować dokładnie jeden wielomian o postaci:
+	\begin{equation}
+	W_N(x) = a_0 + a_1x + a_2x^2 + \dots + a_Nx^N
+	\end{equation}
+	\par Szczególnym przykładem interpolacji wielomianowej jest interpolacja Lagrange'a, dla której baza funkcji określona jest następującym wzorem:
+	\begin{equation}
+	\phi_i(x) = \prod_{j=0, j \neq i}^n \frac{(x - x_j)}{(x_i - x_j)}
+	\end{equation}
+	\par Po zastosowaniu go dla wszystkich węzłów interpolacyjnych można wyznaczyć wielomian interpolacyjny w następujący sposób:
+	\begin{equation}
+    W_N(x) = \sum_{i=0}^n f(x_i)\phi_i(x)
+  	\end{equation}
+  	
+  	\subsection{Interpolacja funkcjami sklejanymi}
+  	Interpolacja funkcjami sklejanymi (splajnami), w przeciwieństwie do wielomianowej, ma charakter lokalny, ponieważ stosuje się dla niej wielomiany niskiego stopnia między poszczególnymi węzłami. Mianowicie dla $N+1$ węzłów należy utworzyć $N$ wielomianów oznaczanych $S_0(x), S_1(x), \dots, S_{N-1}(x)$, gdzie $S_i(x)$ to funkcja sklejana dla przedziału $[x_i, x_{i+1}]$. Od ich stopnia zależy ile niewiadomych zostanie wprowadzonych i jak dokładna będzie interpolacja. W praktyce okazuje się, że wielomiany trzeciego stopnia pozwalają na uzyskanie dobrych aproksymacji i właśnie one zostały użyte w implementacji algorytmu. 
+  	\par W celu utworzenia układu równań dla $N+1$ węzłów, wprowadzone zostały następujące założenia, z których wynikły następujące równania:
+  	\begin{itemize}
+  		\item Węzły są równo rozmieszczone, zatem $x_{i+1}-x_i=h, \quad \forall i \in \{0, 1, 2, \dots, N-1\}$
+  		\item $S_i(x_i)=f(x_i) \implies a_i = f(x_i), \quad \forall i \in \{0, 1, 2, \dots, N-1\}$
+  		\item $S_i(x_{i+1})=f(x_{i+1}) \implies a_i + b_ih + c_ih^2 + d_ih^3 = f(x_{i+1}), \quad \forall i \in \{0, 1, 2, \dots, N-1\}$
+  		\item $S'_{i-1}(x_i)=S'_i(x_i) \implies b_{i-1} + 2c_{i-1}h + 3d_{i-1}h^2 = b_i, \quad \forall i \in \{1, 2, \dots, N-1\}$
+  		\item $S''_{i-1}(x_i)=S''_i(x_i) \implies 2c_{i-1} + 6d_{i-1}h = 2c_i, \quad \forall i \in \{1, 2, \dots, N-1\}$
+  		\item $S''_0(x_0)=0 \implies c_0=0$
+  		\item $S''_{N-1}(x_N)=0 \implies 2c_{N-1} + 6d_{N-1}h = 0$
+  	\end{itemize}
+  	
 
 \end{document}
