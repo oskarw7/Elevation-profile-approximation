@@ -9,6 +9,8 @@
 \geometry{margin=2.5cm}     % Marginesy 2.5cm
 \usepackage{indentfirst}    % Wcięcie w pierwszej linii
 \usepackage{url}			 % Linkowanie w bibliografii
+\usepackage{subfig}         % Wykresy
+\usepackage{float}          % WYkresy
 
 % Strona tytułowa
 \title{\textbf{Aproksymacja profilu wysokościowego}}
@@ -47,10 +49,11 @@ Politechnika Gdańska, WETI}
   	\end{equation}
   	
   	\subsection{Interpolacja funkcjami sklejanymi}
-  	Interpolacja funkcjami sklejanymi (splajnami), w przeciwieństwie do wielomianowej, ma charakter lokalny, ponieważ stosuje się dla niej wielomiany niskiego stopnia między poszczególnymi węzłami. Mianowicie dla $N+1$ węzłów należy utworzyć $N$ wielomianów oznaczanych $S_0(x), S_1(x), \dots, S_{N-1}(x)$, gdzie $S_i(x)$ to funkcja sklejana dla przedziału $[x_i, x_{i+1}]$. Od ich stopnia zależy ile niewiadomych zostanie wprowadzonych i jak dokładna będzie interpolacja. W praktyce okazuje się, że wielomiany trzeciego stopnia pozwalają na uzyskanie dobrych aproksymacji i właśnie one zostały użyte w implementacji algorytmu. 
+  	Interpolacja funkcjami sklejanymi (splajnami), w przeciwieństwie do wielomianowej, ma charakter lokalny, ponieważ stosuje się dla niej wielomiany niskiego stopnia między poszczególnymi węzłami. Mianowicie dla $N+1$ węzłów należy utworzyć $N$ wielomianów oznaczanych $S_0(x), S_1(x), \dots, S_{N-1}(x)$, gdzie $S_i(x)$ to funkcja sklejana dla przedziału $[x_i, x_{i+1}]$. Od ich stopnia zależy ile niewiadomych zostanie wprowadzonych i jak dokładna będzie interpolacja. W praktyce okazuje się, że wielomiany trzeciego stopnia (splajny kubiczne) pozwalają na uzyskanie dobrych aproksymacji i właśnie one zostały użyte w implementacji algorytmu. 
   	\par W celu utworzenia układu równań dla $N+1$ węzłów, wprowadzone zostały następujące założenia, z których wynikły następujące równania:
   	\begin{itemize}
   		\item Węzły są równo rozmieszczone, zatem $x_{i+1}-x_i=h, \quad \forall i \in \{0, 1, 2, \dots, N-1\}$
+  		\item Szukane splajny są wielomianami trzeciego stopnia
   		\item $S_i(x_i)=f(x_i) \implies a_i = f(x_i), \quad \forall i \in \{0, 1, 2, \dots, N-1\}$
   		\item $S_i(x_{i+1})=f(x_{i+1}) \implies a_i + b_ih + c_ih^2 + d_ih^3 = f(x_{i+1}), \quad \forall i \in \{0, 1, 2, \dots, N-1\}$
   		\item $S'_{i-1}(x_i)=S'_i(x_i) \implies b_{i-1} + 2c_{i-1}h + 3d_{i-1}h^2 = b_i, \quad \forall i \in \{1, 2, \dots, N-1\}$
@@ -58,6 +61,27 @@ Politechnika Gdańska, WETI}
   		\item $S''_0(x_0)=0 \implies c_0=0$
   		\item $S''_{N-1}(x_N)=0 \implies 2c_{N-1} + 6d_{N-1}h = 0$
   	\end{itemize}
+  	\par Dzięki temu otrzymano układ równań, który łatwo można przedstawić w postaci macierzowej $\textbf{A}\textbf{x}=\textbf{b}$, gdzie \textbf{A} to macierz zawierająca wartości współczynników dla równań, \textbf{x} to wektor kolumnowy zawierający szukane współczynniki splajnów $[a_0, b_0, c_0, d_0, \dots]$, a \textbf{b} to wektor kolumnowy zawierający wartości liczbowe, np. $f(x_i)$.
+  	Po znalezieniu równań splajnów postaci $S_i(x)=a_i+b_i(x-x_i)+c_i(x-x_i)^2+d_i(x-x_i)^3$ można rozpocząć aproksymację wartości dla siatki punktów. W tym celu należy odnaleźć przedział między dwoma węzłami zawierający ten punkt i podstawić go do odpowiadającemu temu przedziałowi wielomianu.
   	
+	\subsection{Dane wejściowe i metodyka}
+	W celu analizy różnych metod interpolacji wykorzystano profile topologiczne o różnym charakterze:
+	\begin{itemize}
+		\item \texttt{MountEverest.csv} - fragment profilu topologicznego dla góry Mount Everest charakteryzujący się jednym, wyraźnym wzniesieniem z maksymalną różnicą wysokości ok. 2000 m.n.p.m.
+		\item \texttt{chelm.txt} - charakteryzuje się niewielkimi zmianami wysokości, z maksymalną różnicą wysokości ok. 3 m.n.p.m.
+		\item \texttt{genoa\_rapallo.txt} - profil topologiczny dla trasy między Genuą a Rapallo charakteryzujący się licznymi stromymi wzniesieniami z maksymalną różnicą wysokości ok. 500 m.n.p.m.
+		\item \texttt{WielkiKanionKolorado.csv} - profil topologiczny Wielkiego Kanionu charakteryzujący się pojedynczym, silnym spadkiem wysokości i maksymalną różnicą wysokości ok. 1750 m.n.p.m.
+	\end{itemize}
+  \begin{figure}[H]
+    \centering
+    \subfloat{\includegraphics[width=0.5\textwidth]{../charts/input_MountEverest.png}}
+    \subfloat{\includegraphics[width=0.5\textwidth]{../charts/input_chelm.png}}
+  \end{figure}
+  \begin{figure}[H]
+    \centering
+    \subfloat{\includegraphics[width=0.5\textwidth]{../charts/input_genoa_rapallo.png}}
+    \subfloat{\includegraphics[width=0.5\textwidth]{../charts/input_WielkiKanionKolorado.png}}
+  \end{figure}
+  \par Dla każdej metody interpolacji oraz trasy wykorzystano siatkę 512 punktów, z czego jako węzły interpolacyjne wybierano kolejno 5, 10, 20 i 50 z nich.
 
 \end{document}

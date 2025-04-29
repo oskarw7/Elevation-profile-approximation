@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 
 def plotOriginal(x: list[float], y: list[float], filename: str):
-    plt.figure(figsize=(25, 10))
-    plt.plot(x, y)
+    plt.rcParams.update({'font.size': 17})
+    plt.figure(figsize=(15, 10))
+    plt.plot(x, y, color='blue')
     plt.title(f"Dane wejściowe dla {filename}")
     plt.xlabel("Odległość[m]")
     plt.ylabel("Wysokość[m]")
