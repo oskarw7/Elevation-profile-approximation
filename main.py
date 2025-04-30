@@ -39,7 +39,7 @@ def main():
             charts.plotInterpolation(axes[row, col], xSubset, ySubset, yTest, xNodesReverseScaled, yNodes,
                                      "Lagrange+Czebyszew", nodesCount[i])
         name = path[0].rsplit('.', 1)[0]
-        plt.savefig(f"charts/chebyszev_{name}.png")
+        plt.savefig(f"charts/chebyshev_{name}.png")
         plt.close(fig)
 
         fig, axes = plt.subplots(len(nodesCount) // 2, len(nodesCount) // 2, figsize=(15, 12))

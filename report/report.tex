@@ -85,7 +85,10 @@ Politechnika Gdańska, WETI}
   \par Dla każdej metody interpolacji oraz trasy wykorzystano siatkę 512 punktów, z czego jako węzły interpolacyjne wybierano kolejno 5, 10, 20 i 50 z nich. W wykresach bezpośrednio dotyczących interpolacji zastosowano skalę logarytmiczną dla lepszego zobrazowania pożądanych własności analizowanych metod.
   
 \section{Analiza wyników interpolacji metodą Lagrange'a}
-	W pierwszej kolejności zaimplementowano interpolację wielomianową Lagrange'a z równoodległymi węzłami interpolacyjnymi.
+	W pierwszej kolejności zaimplementowano interpolację wielomianową Lagrange'a z równoodległymi węzłami interpolacyjnymi definiowanymi następująco na przedziale $[a, b]$:
+		\begin{equation}
+	x_i = a + (b-a)\frac{i}{N-1}, \quad i \in \{0, 1, 2, \dots, N-1\}
+	\end{equation}
 	
 	\subsection{MountEverest.csv}
 	Dla 5 węzłów wielomian stosunkowo dobrze przybliża profil topologiczny o pojedynczym wzniesieniu. Jednak dla coraz większej ilości węzłów można zauważyć, że wzrastającej dokładności aproksymacji w środku przedziału towarzyszy coraz to silniejsza niedokładność na jego skraju. Niedokładność ta pokrywa coraz to większy przedział i błąd przybliżenia staje się coraz większy - dla 50 węzłów wartość jest rzędu $10^12$ zamiast wzorcowej ok. 7000. Efekt ten nazywany jest efektem Rungego i omawiany będzie szerzej w dalszej części opracowania.
@@ -102,7 +105,7 @@ Politechnika Gdańska, WETI}
     
     \newpage
    	\subsection{Genoa\_rapallo.txt}
-	Dla profilu topologicznego o silnych oscylacjach w żadnych przypadku nie udało się dobrze go przybliżyć. Dla 5 węzłów wielomian zarysowuje jedynie trend funkcji, a dla 10 węzłów przy silniejszej zmianie wysokości następuję gwałtowna zmiana wartości funkcji interpolującej z nieakceptowalnym błędem aproksymacji. Z kolei dla 20 i 50 węzłów ponownie zaobserwowano efekt Rungego, w ostatnim przypadku na jeszcze większej części przedziału niż przedtem.
+	Dla profilu topologicznego o silnych oscylacjach w żadnym przypadku nie udało się dobrze go przybliżyć. Dla 5 węzłów wielomian zarysowuje jedynie trend funkcji, a dla 10 węzłów przy silniejszej zmianie wysokości następuję gwałtowna zmiana wartości funkcji interpolującej z nieakceptowalnym błędem aproksymacji. Z kolei dla 20 i 50 węzłów ponownie zaobserwowano efekt Rungego, w ostatnim przypadku na jeszcze większej części przedziału niż przedtem.
 	\begin{center}
         \includegraphics[scale=0.4]{../charts/lagrange_genoa_rapallo.png}
     \end{center}
@@ -114,10 +117,39 @@ Politechnika Gdańska, WETI}
         \includegraphics[scale=0.4]{../charts/lagrange_WielkiKanionKolorado.png}
     \end{center}
     
+\newpage   
 \section{Analiza wyników interpolacji metodą Lagrange'a z węzłami Czebyszewa}
-	Jedną z metod poprawy dokładności interpolacji wielomianowej jest zmiana sposoby rozmieszczenia węzłów interpolacyjnych. Przykładem są węzły Czebyszewa drugiego rodzaju definiowane następująco na przedziale $[a, b]$:
+	Jedną z metod poprawy dokładności interpolacji wielomianowej jest zmiana sposobu rozmieszczenia węzłów interpolacyjnych. Przykładem są węzły Czebyszewa drugiego rodzaju definiowane następująco na przedziale $[a, b]$:
 	\begin{equation}
-	x_i = \frac{a+b}{2} + \frac{b-a}{2}\cos(\frac{i}{N-1}\pi), \quad \forall i \in \{0, 1, 2, \dots, N-1\}
+	x_i = \frac{a+b}{2} + \frac{b-a}{2}\cos(\frac{i}{N-1}\pi), \quad i \in \{0, 1, 2, \dots, N-1\}
 	\end{equation}
+	Węzły Czebyszewa charakteryzują się większym zagęszczeniem na krańcach przedziału, ograniczając wystąpienie efektu Rungego, który zaobserwowano powyżej. Polega on na pogorszeniu się jakości interpolacji mimo zwiększającej się liczby węzłów. Szczególnie widoczny jest na krańcach przedziałów, co pokazano wcześniej.
+	
+	\subsection{MountEverest.csv}
+	Dla 5 węzłów wielomian interpolacyjny jest zbliżony do omówionego wyżej. Jednak dla większej liczby węzłów widoczna jest znaczna poprawa dokładności - nie jest obserwowany bowiem efekt Rungego. Dla 50 węzłów otrzymano funkcję prawie idealnie pokrywającą wzorcowy profil topologiczny.
+	\begin{center}
+        \includegraphics[scale=0.4]{../charts/chebyshev_MountEverest.png}
+    \end{center}
+    
+    \newpage
+	\subsection{Chelm.txt}
+	Dla w przybliżeniu stałego profilu topologicznego 5 węzłów z grubsza go aproksymuje, omijając drobne zmiany wysokości, podobnie jak wcześniej. Nieco lepiej jest da 10 i 20 węzłów, kiedy to skutecznie uniknięto efektu Rungego. Z kolei dla 50 węzłów ponownie osiągnięto bardzo dokładny wielomian.
+	\begin{center}
+        \includegraphics[scale=0.4]{../charts/chebyshev_chelm.png}
+    \end{center}
+    
+    \newpage
+   	\subsection{Genoa\_rapallo.txt}
+	Dla profilu topologicznego o silnych oscylacjach w żadnym przypadku tutaj również nie udało się dobrze go przybliżyć. Obserwowane jest zarysowanie linii trendu dla mniejszej liczby węzłów i pojawiające się silne spadki wartości funkcji interpolującej dla ich większej liczby. Nawet dla 50 węzłów wielomian nie jest w stanie pokryć występujących oscylacji.
+	\begin{center}
+        \includegraphics[scale=0.4]{../charts/chebyshev_genoa_rapallo.png}
+    \end{center}
+    
+    \newpage
+	\subsection{WielkiKanionKolorado.txt}
+	Dla profilu topologicznego o silnym spadku dokładność aproksymacji jest podobna do tej dla wzniesienia, ale 20 węzłów nie jest w stanie pokryć występujących dwóch niewielkich peaków. Tutaj również udało się uniknąć efektu Rungego.
+	\begin{center}
+        \includegraphics[scale=0.4]{../charts/chebyshev_WielkiKanionKolorado.png}
+    \end{center}
 
 \end{document}
