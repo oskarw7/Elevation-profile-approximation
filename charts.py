@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
 
 def plotOriginal(x: list[float], y: list[float], filename: str):
-    plt.rcParams.update({'font.size': 17})
     plt.figure(figsize=(15, 10))
     plt.plot(x, y, color='blue')
-    plt.title(f"Dane wejściowe dla {filename}")
-    plt.xlabel("Odległość[m]")
-    plt.ylabel("Wysokość[m]")
+    plt.title(f"Dane wejściowe dla {filename}", fontsize=25)
+    plt.xlabel("Odległość[m]", fontsize=25)
+    plt.ylabel("Wysokość[m]", fontsize=25)
+    plt.tick_params(axis='both', which='major', labelsize=25)
     name = filename.rsplit('.', 1)[0]
     plt.savefig(f"charts/input_{name}.png")
     # plt.show()
