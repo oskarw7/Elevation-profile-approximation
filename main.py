@@ -55,8 +55,8 @@ def main():
         plt.savefig(f"charts/cubic_spline_{name}.png")
         plt.close(fig)
 
-        fig, axes = plt.subplots(len(nodesCount), 3, figsize=(20, 25))
-        fig.suptitle(f"Wyniki metod interpolacji dla {path[0]}", fontsize=20)
+        fig, axes = plt.subplots(len(nodesCount), 3, figsize=(21, 30))
+        fig.suptitle(f"Zestawienie metod interpolacji dla {path[0]}", fontsize=20)
         for i in range(len(nodesCount)):
             xNodes, yNodes = utils.getInterpolationNodes(xScaled, yScaled, nodesCount[i], utils.linspace)
             yTest = lagrange.lagrangeInterpolation(xScaled, xNodes, yNodes)
@@ -77,6 +77,17 @@ def main():
         name = path[0].rsplit('.', 1)[0]
         plt.savefig(f"charts/comparison_{name}.png")
         plt.close(fig)
+
+        if path[0] == "genoa_rapallo.txt":
+            fig = plt.figure(figsize=(15, 7))
+            axes = fig.gca()
+            xNodes, yNodes = utils.getInterpolationNodes(xSubset, ySubset, 500, utils.linspace)
+            yTest = cubic_spline.cubicSplineIntepolation(xSubset, xNodes, yNodes)
+            charts.plotInterpolation(axes, xSubset, ySubset, yTest, xNodes, yNodes,
+                                     "funkcji sklejanych", 500)
+            name = path[0].rsplit('.', 1)[0]
+            plt.savefig(f"charts/cubic_spline_500_{name}.png")
+            plt.close(fig)
 
 
 if __name__ == '__main__':

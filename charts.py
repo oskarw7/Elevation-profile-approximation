@@ -9,7 +9,6 @@ def plotOriginal(x: list[float], y: list[float], filename: str):
     plt.tick_params(axis='both', which='major', labelsize=25)
     name = filename.rsplit('.', 1)[0]
     plt.savefig(f"charts/input_{name}.png")
-    # plt.show()
 
 def plotInterpolation(axes, xPoints: list[float], yPoints: list[float], yInterpolation: list[float],
                       xNodes: list[float], yNodes: list[float], method: str, nodesCount: int):
@@ -19,4 +18,4 @@ def plotInterpolation(axes, xPoints: list[float], yPoints: list[float], yInterpo
     axes.set_title(f"Wykres metody {method} dla {nodesCount} węzłów")
     axes.set_xlabel("Odległość[m]")
     axes.set_ylabel("Wysokość[m]")
-    axes.legend(["Funkcja wejściowa", "Wielomian interpolacyjny", "Węzły interpolacyjne"])
+    axes.legend(["Funkcja wejściowa", "Funkcja interpolująca", "Węzły interpolacyjne"])

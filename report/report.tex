@@ -84,7 +84,7 @@ Politechnika Gdańska, WETI}
   \end{figure}
   \par Dla każdej metody interpolacji oraz trasy wykorzystano siatkę 512 punktów, z czego jako węzły interpolacyjne wybierano kolejno 5, 10, 20 i 50 z nich. W wykresach bezpośrednio dotyczących interpolacji zastosowano skalę logarytmiczną dla lepszego zobrazowania pożądanych własności analizowanych metod.
   
-\section{Analiza wyników interpolacji metodą Lagrange'a}
+\section{Analiza wyników interpolacji Lagrange'a}
 	W pierwszej kolejności zaimplementowano interpolację wielomianową Lagrange'a z równoodległymi węzłami interpolacyjnymi definiowanymi następująco na przedziale $[a, b]$:
 		\begin{equation}
 	x_i = a + (b-a)\frac{i}{N-1}, \quad i \in \{0, 1, 2, \dots, N-1\}
@@ -118,7 +118,7 @@ Politechnika Gdańska, WETI}
     \end{center}
     
 \newpage   
-\section{Analiza wyników interpolacji metodą Lagrange'a z węzłami Czebyszewa}
+\section{Analiza wyników interpolacji Lagrange'a z węzłami Czebyszewa}
 	Jedną z metod poprawy dokładności interpolacji wielomianowej jest zmiana sposobu rozmieszczenia węzłów interpolacyjnych. Przykładem są węzły Czebyszewa drugiego rodzaju definiowane następująco na przedziale $[a, b]$:
 	\begin{equation}
 	x_i = \frac{a+b}{2} + \frac{b-a}{2}\cos(\frac{i}{N-1}\pi), \quad i \in \{0, 1, 2, \dots, N-1\}
@@ -133,14 +133,14 @@ Politechnika Gdańska, WETI}
     
     \newpage
 	\subsection{Chelm.txt}
-	Dla w przybliżeniu stałego profilu topologicznego 5 węzłów z grubsza go aproksymuje, omijając drobne zmiany wysokości, podobnie jak wcześniej. Nieco lepiej jest da 10 i 20 węzłów, kiedy to skutecznie uniknięto efektu Rungego. Z kolei dla 50 węzłów ponownie osiągnięto bardzo dokładny wielomian.
+	Dla w przybliżeniu stałego profilu topologicznego 5 węzłów z grubsza go aproksymuje, omijając drobne zmiany wysokości, podobnie jak wcześniej. Nieco lepiej jest dla 10 i 20 węzłów, kiedy to skutecznie uniknięto efektu Rungego. Z kolei dla 50 węzłów ponownie osiągnięto bardzo dokładny wielomian, z trzema bardziej widocznymi niedokładnościami dla $x \in \{70, 100, 150\}$.
 	\begin{center}
         \includegraphics[scale=0.4]{../charts/chebyshev_chelm.png}
     \end{center}
     
     \newpage
    	\subsection{Genoa\_rapallo.txt}
-	Dla profilu topologicznego o silnych oscylacjach w żadnym przypadku tutaj również nie udało się dobrze go przybliżyć. Obserwowane jest zarysowanie linii trendu dla mniejszej liczby węzłów i pojawiające się silne spadki wartości funkcji interpolującej dla ich większej liczby. Nawet dla 50 węzłów wielomian nie jest w stanie pokryć występujących oscylacji.
+	Dla profilu topologicznego o silnych oscylacjach w żadnym przypadku nie udało się dobrze go przybliżyć, tak jak w poprzedniej implementacji. Obserwowane jest zarysowanie linii trendu dla mniejszej liczby węzłów i pojawiające się silne spadki wartości funkcji interpolującej dla ich większej liczby. Ponadto, nawet dla 50 węzłów wielomian nie jest w stanie pokryć występujących oscylacji.
 	\begin{center}
         \includegraphics[scale=0.4]{../charts/chebyshev_genoa_rapallo.png}
     \end{center}
@@ -151,5 +151,48 @@ Politechnika Gdańska, WETI}
 	\begin{center}
         \includegraphics[scale=0.4]{../charts/chebyshev_WielkiKanionKolorado.png}
     \end{center}
+    
+\newpage   
+\section{Analiza wyników interpolacji splajnami kubicznymi}
+	Dla interpolacji funkcjami sklejanymi trzeciego stopnia przyjęto wszystkie założenia z punktu \textbf{1.4}.
+	
+	\subsection{MountEverest.csv}
+	Dla 5 węzłów stosunkowo dobrze przybliżono profil topologiczny o pojedynczym wzniesieniu, jednak nieco gorzej między pierwszymi dwoma węzłami w porównaniu do poprzednich metod. Mimo tego dość dokładną aproksymację profilu osiągnięto już dla 10 węzłów, podczas gdy metody wielomianowe nie przybliżały dobrze szczytu wzniesienia. Wzrastająca liczba węzłów pozwoliła na coraz to lepsze odwzorowanie, dając najlepszą dotąd interpolację dla 50 węzłów.
+	\begin{center}
+        \includegraphics[scale=0.4]{../charts/cubic_spline_MountEverest.png}
+    \end{center}
+    
+    \newpage
+	\subsection{Chelm.txt}
+	Dla mało zmiennego profilu wysokościowego osiągnięto wyniki bardzo zbliżone do tych dla interpolacji Lagrange'a z węzłami Czebyszewa. 
+	\begin{center}
+        \includegraphics[scale=0.4]{../charts/cubic_spline_chelm.png}
+    \end{center}
+    
+    \newpage
+   	\subsection{Genoa\_rapallo.txt}
+	Dla profilu topologicznego o silnych oscylacjach interpolacja splajnami zapewniła najlepsze dotąd wyniki. Nie wystąpiły bardzo duże błędy aproksymacji, które zaobserwowano dla wielomianów. Mimo tego, 50 węzłów również nie mogło pokryć wszystkich ekstremów lokalnych, dlatego przeprowadzono dalsze testy. Dopiero dla 500 węzłów udało się bardzo dokładnie przybliżyć profil na całym rozpatrywanym przedziale
+	\begin{center}
+        \includegraphics[scale=0.4]{../charts/cubic_spline_genoa_rapallo.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.4]{../charts/cubic_spline_500_genoa_rapallo.png}
+    \end{center}
+    
+    \newpage
+	\subsection{WielkiKanionKolorado.txt}
+	Dla profilu topologicznego o silnym spadku zauważono widoczną poprawę od 20 węzłów. Pierwsza metoda dobrze przybliżała środek, ale zaobserwowano efekt Rungego na krańcach przedziału. Druga metoda dobrze pokrywała krańce, ale kosztem mniejszej ilości węzłów w środku przedziału, a co za tym idzie - mniejszej dokładności. Z kolei interpolacja splajnami pozwoliła na stosunkowo wysoką dokładność w całym przedziale. Mimo tego dla 50 węzłów pominięte zostały drobne zmiany wysokości dla $x \in \{13000, 15000\}$.
+	\begin{center}
+        \includegraphics[scale=0.4]{../charts/cubic_spline_WielkiKanionKolorado.png}
+    \end{center}
+    
+\section{Zestawienie}
+    \begin{center}
+        \includegraphics[scale=0.3]{../charts/comparison_genoa_rapallo.png}
+    \end{center}
+    
+\section{Podsumowanie}
+	Podsumowując, w powyższej analizie ukazane zostały wady i zalety każdej z metod. Zaletą interpolacji Lagrange'a jest prostota implementacji - nie wymaga liczenia pochodnych ani rozwiązywania układu równań. Wadami natomiast są globalny charakter aproksymacji oraz efekt Rungego, powodujący nieakceptowalne błędy aproksymacji. Metoda jego ograniczania, wprowadzenie węzłów Czebyszewa, również wprowadza pewne niedoskonałości - przeciwdziała wspomnianej wadzie i pozwala na prawidłowe skalowanie dokładności ze wzrastającą liczbą węzłów, ale dzieje się to kosztem zmniejszenia liczby węzłów w środku przedziału i możliwości omijania punktów krytycznych, takich jak wzniesienia. Z kolei interpolacja funkcjami sklejanymi pozwala na uzyskanie bardzo dokładnych rozwiązań i wzrost tej dokładności dla coraz większej liczby węzłów. Jednak wymaga liczenia pochodnych i rozwiązywania dość sporych układów równań, co może w niektórych sytuacjach znacząco wydłużyć czas obliczeń.
+
 
 \end{document}
