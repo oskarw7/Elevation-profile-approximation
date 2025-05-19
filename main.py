@@ -11,7 +11,6 @@ def main():
         x, y = utils.readData(f"input/{path[0]}", path[1])
         xSubset, ySubset = utils.dataSubset(x, y, 512)
         xScaled, yScaled = utils.scaleTo(xSubset, xSubset[0], xSubset[-1]), ySubset
-        xScaled, yScaled = utils.scaleTo(xSubset, xSubset[0], xSubset[-1]), ySubset
         charts.plotOriginal(xSubset, ySubset, path[0])
 
         fig, axes = plt.subplots(len(nodesCount)//2, len(nodesCount)//2, figsize=(15, 12))
